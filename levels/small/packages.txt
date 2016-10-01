@@ -1,0 +1,3 @@
+zplug-small
+tmux-small
+vim-small

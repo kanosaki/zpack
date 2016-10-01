@@ -1,0 +1,445 @@
+
+set nocompatible
+
+let s:noplugin = 0
+
+augroup MyAutoCmd
+  autocmd!
+augroup END
+
+let s:vimrc_dir = fnamemodify(resolve(expand('<sfile>')), ':h')
+let s:toml_file = s:vimrc_dir . '/dein.toml'
+let s:lazy_toml_file = s:vimrc_dir . '/dein_lazy.toml'
+let &runtimepath=&runtimepath . ',' . s:vimrc_dir . '/dein/repos/github.com/Shougo/dein.vim'
+let s:dein_dir = s:vimrc_dir . '/dein'
+if dein#load_state(s:dein_dir)
+  call dein#begin(s:dein_dir, [$MYVIMRC, s:toml_file])
+  call dein#load_toml(s:toml_file)
+  call dein#load_toml(s:lazy_toml_file, {'lazy': 1})
+  call dein#end()
+  call dein#save_state()
+endif
+" 不足プラグインの自動インストール
+if has('vim_starting') && dein#check_install()
+  call dein#install()
+endif
+
+syntax on
+filetype on
+filetype indent on
+filetype plugin on
+
+set t_Co=256
+
+" 表示 "{{{
+
+"タイトルを表示
+set notitle
+" Title length.
+set titlelen=95
+" Title string.
+set titlestring=%f%(\ %M%)%(\ (%{getcwd()})%)%(\ %a%)
+"set autowrite
+set scrolloff=5 " スクロール時の余白確保
+set sidescrolloff=8
+set showmatch
+let &backupdir=s:vimrc_dir . '/backup'
+set backup
+let &directory=s:vimrc_dir . '/swap'
+set swapfile
+set nonumber
+set history=1000
+set list
+set listchars=tab:\ \ ,extends:<,trail:\ 
+set laststatus=2
+set wildmode=list:longest
+set wildmenu
+set backspace=indent,eol,start
+set autoindent smartindent
+set smarttab
+set whichwrap=b,s,h,l,<,>,[,]
+set nowrap
+set nostartofline
+set confirm
+set mouse=a
+set modeline
+set cul
+set more
+set autoread
+set cmdheight=2
+set ttyfast
+if !has('nvim')
+  set ttymouse=xterm2
+endif
+set lazyredraw
+set ruler
+
+"Don't show welcome message
+set shortmess=aTI
+
+set matchpairs+=<:>
+
+" Powerline settings
+" This must not be in gvimrc, but vimrc.
+"if has('gui_running')
+"    let g:Powerline_symbols = 'fancy'
+"endif
+if has('gui_running')
+  "ツールバーなし
+  set guioptions-=T
+  ""メニューバーなし
+  set guioptions-=m
+  "右スクロールバーなし
+  set guioptions-=r
+  set guioptions-=R
+  ""左スクロールバーなし
+  set guioptions-=l
+  set guioptions-=L
+  "下スクロールバーなし
+  set guioptions-=b
+  "
+endif
+
+"タブ関連{{{
+set tabstop=2
+set shiftwidth=2
+set softtabstop=2
+set expandtab
+set statusline=[%{winnr('$')>1?':'.winnr().'/'.winnr('$'):''}]\ %t\ %y%{'['.(&fenc!=''?&fenc:&enc).':'.&ff.']'}%r%m%=%c:%l/%L
+"}}}
+
+"}}}
+" バッファ関連 "{{{
+" 切り替え時のundoの効果持続等
+set hidden           
+
+" Splitting a window will put the new window below the current one.
+set splitbelow
+" Splitting a window will put the new window right the current one.
+set splitright
+
+"}}}
+" キーバインド "{{{
+
+nnoremap <C-e> $
+nnoremap <C-a> ^
+
+nnoremap <Space> <C-d>
+nnoremap <S-Space> <C-u> 
+
+"実行
+nnoremap <F5> !./%<CR>
+"全文オートインデント
+
+inoremap <C-b> <C-o>b
+inoremap <C-f> <ESC>ea
+inoremap <C-q> <ESC>
+noremap <C-q> <ESC>
+silent !stty -ixon > /dev/null 2>/dev/null
+inoremap <C-a> <C-o>:call WSBack()<CR>
+
+"Create and move new line below and upper with modified return key
+inoremap <C-L> <C-o>l
+inoremap <C-e> <C-o>$
+inoremap <C-k> <C-o>d$
+inoremap <C-u> <C-o>k
+inoremap <C-d> <Del>
+
+inoremap <C-j> <C-o>o
+
+"バッファ、タブ関連
+nnoremap <silent> tp :tabprevious<CR>
+nnoremap <silent> tn :tabnext<CR>
+nnoremap <silent> tm :tabmove 
+nnoremap <silent> te :tabe 
+nnoremap <silent> tc :tabclose<CR>
+nnoremap <silent> } :bn<CR>
+nnoremap <silent> { :bp<CR>
+nnoremap <silent> ` <C-w><C-w><CR>
+nnoremap <M-h> <C-W>h
+nnoremap <M-j> <C-W>j
+nnoremap <M-k> <C-W>k
+nnoremap <M-l> <C-W>l
+nnoremap <M-n> :bn<CR>
+nnoremap <M-p> :bp<CR>
+nnoremap <M-d> :bd<CR>
+nnoremap <M-q> :q<CR>
+nnoremap <D-D> :bd<CR>
+
+"オムニ補完
+inoremap <C-Space> <C-X><C-O>
+"ノーマルモードで簡易編集
+nnoremap <DEL> x
+nnoremap <BS> X
+nnoremap <C-h> X
+nnoremap <Return> i<Return><ESC>
+nnoremap <C-Return> o<ESC>
+              
+"検索したとき に、カーソルが画面の真ん中に来るようにする
+nnoremap n nz z
+nnoremap N Nzz
+nnoremap * *zz
+nnoremap # #zz
+nnoremap g* g*zz
+nnoremap g# g#zz
+
+" コマンドモード
+cnoremap <C-F> <Right>
+cnoremap <C-B> <Left>
+
+
+"Move carret visuallity
+nnoremap j gj
+nnoremap k gk
+
+"Unite
+nnoremap <silent> <C-k>f :<C-u>Unite -vertical file file_mru directory_mru<CR>
+nnoremap <silent> _ :<C-u>Unite buffer file file_mru directory_mru<CR>
+nnoremap <silent> <Leader>u :<C-u>Unite buffer file file_mru directory_mru<CR>
+"nnoremap <silent> go :<C-u>Unite -vertical outline<CR>
+nnoremap <silent> go :TagbarToggle<CR>
+nnoremap <silent> gb :<C-u>Unite buffer<CR>
+nnoremap <silent> <C-k>b :<C-u>Unite buffer<CR>
+nnoremap <silent> <C-k>o :<C-u>Unite outline<CR>
+nnoremap <silent> <C-k>m :<C-u>Unite mark<CR>
+
+" disable ?(Search backward) and use ? as ack search
+nnoremap ? :<C-u>Unite ack<CR>
+
+"}}}
+
+let g:untie_split_rule='botright'
+let g:unite_winwidth=70
+if executable('ag')
+  let g:unite_source_grep_command = 'ag'
+  let g:unite_source_grep_default_opts = '--nogroup --nocolor --column'
+  let g:unite_source_grep_recursive_opt = ''
+endif
+
+" RSense
+let g:rsenseUseOmniFunc=1
+
+
+" }}}
+"ファイルタイプごとの設定{{{
+
+au BufRead,BufNewFile,BufReadPre *.coffee set filetype=coffee
+autocmd FileType coffee setlocal sw=2 sts=2 ts=2
+
+au BufRead,BufNewFile,BufReadPre *.rs set filetype=rust
+
+" Dockerfile
+au BufRead,BufNewFile Dockerfile* setf Dockerfile
+au BufRead,BufNewFile *.dock setf Dockerfile
+
+" Markdown
+au BufRead,BufNewFile,BufReadPre *.md set filetype=markdown
+
+" kl1
+au BufRead,BufNewFile,BufReadPre *.kl1 set filetype=prolog
+
+" org-mode
+au BufRead,BufNewFile,BufReadPre *.org set filetype=org
+
+" Go
+au BufRead,BufNewFile,BufReadPre *.go set filetype=go
+
+" JavaScript
+au BufRead,BufNewFile,BufReadPre *.js set syntax=javascript
+"}}}
+" Folding "{{{
+set foldenable
+set foldmethod=marker
+set foldcolumn=3
+
+highlight Folded ctermbg=none
+highlight FoldColumn ctermbg=none
+
+"}}}
+" 検索 "{{{
+
+" 検索文字列が小文字の場合は大文字小文字を区別なく検索する(noignorecase)
+set ignorecase
+" 検索文字列に大文字が含まれている場合は区別して検索する(nosmartcase)
+set smartcase
+" 検索文字のハイライトをする
+set hlsearch
+" インクリメンタルサーチ
+set incsearch
+"<C-l>でハイライトを除去
+nnoremap <silent> <ESC><ESC> :nohl<CR>
+
+" Use vimgrep as grep
+set grepprg=internal
+"}}}
+" 日本語設定 "{{{
+" Disable IME on Normal mode
+
+" 全角スペースを視覚化
+highlight ZenkakuSpace cterm=underline ctermfg=lightblue guibg=white
+match ZenkakuSpace /　/
+if !has('kaoriya')
+    " 文字コードの自動認識
+    if &encoding !=# 'utf-8'
+        set encoding=japan
+        set fileencoding=japan
+    endif
+    if has('iconv')
+        let s:enc_euc = 'euc-jp'
+        let s:enc_jis = 'iso-2022-jp'
+        " iconvがeucJP-msに対応しているかをチェック
+        if iconv("\x87\x64\x87\x6a", 'cp932', 'eucjp-ms') ==# "\xad\xc5\xad\xcb"
+            let s:enc_euc = 'eucjp-ms'
+            let s:enc_jis = 'iso-2022-jp-3'
+            " iconvがJISX0213に対応しているかをチェック
+        elseif iconv("\x87\x64\x87\x6a", 'cp932', 'euc-jisx0213') ==# "\xad\xc5\xad\xcb"
+            let s:enc_euc = 'euc-jisx0213'
+            let s:enc_jis = 'iso-2022-jp-3'
+        endif
+        " fileencodingsを構築
+        if &encoding ==# 'utf-8'
+            let s:fileencodings_default = &fileencodings
+            let &fileencodings = s:enc_jis .','. s:enc_euc .',cp932'
+            let &fileencodings = &fileencodings .','. s:fileencodings_default
+            unlet s:fileencodings_default
+        else
+            let &fileencodings = &fileencodings .','. s:enc_jis
+            set fileencodings+=utf-8,ucs-2le,ucs-2
+            if &encoding =~# '^\(euc-jp\|euc-jisx0213\|eucjp-ms\)$'
+                set fileencodings+=cp932
+                set fileencodings-=euc-jp
+                set fileencodings-=euc-jisx0213
+                set fileencodings-=eucjp-ms
+                let &encoding = s:enc_euc
+                let &fileencoding = s:enc_euc
+            else
+                let &fileencodings = &fileencodings .','. s:enc_euc
+            endif
+        endif
+        " 定数を処分
+        unlet s:enc_euc
+        unlet s:enc_jis
+    endif
+endif
+" 日本語を含まない場合は fileencoding に encoding を使うようにする
+if has('autocmd')
+    function! AU_ReCheck_FENC()
+        if &fileencoding =~# 'iso-2022-jp' && search("[^\x01-\x7e]", 'n') == 0
+            let &fileencoding=&encoding
+        endif
+    endfunction
+    autocmd BufReadPost * call AU_ReCheck_FENC()
+endif
+" 改行コードの自動認識
+set fileformats=unix,dos,mac
+" □とか○の文字があってもカーソル位置がずれないようにする
+if exists('&ambiwidth')
+    set ambiwidth=double
+endif
+
+
+"}}}
+" Utility"{{{
+
+" -------------------
+" 自動保存
+" -------------------
+autocmd CursorHold * call NewUpdate()
+set updatetime=500
+let g:svbfre = '.\+'
+
+" Use clipboard register.
+if $TMUX == ''
+    set clipboard+=unnamed
+endif
+
+" create directory automatically
+augroup vimrc-auto-mkdir
+    autocmd!
+    autocmd BufWritePre * call s:auto_mkdir(expand('<afile>:p:h'), v:cmdbang)
+    function! s:auto_mkdir(dir, force)
+        if !isdirectory(a:dir) && (a:force ||
+            \ input(printf('"%s" does not exist. Create? [y/N]', a:dir)) =~? '^y\%[es]$')
+            call mkdir(iconv(a:dir, &encoding, &termencoding), 'p')
+        endif
+    endfunction
+augroup END
+
+"}}}
+" テーマ "{{{
+if has('gui_running')
+    colorscheme wombat
+else
+    colorscheme molokai
+    hi CursorLine term=none cterm=none ctermbg=233
+endif
+" }}}
+"Functions "{{{
+
+fun! WSBack()
+    let rest = getline('.')[0:col('.')-2]
+    if rest =~ '^\s*$'
+        normal 0
+    else
+        normal ^
+    endif
+endfunction
+
+" Set tabline.
+function! s:my_tabline()  "{{{
+    let l:s = ''
+
+    for l:i in range(1, tabpagenr('$'))
+        let l:bufnrs = tabpagebuflist(i)
+        let l:curbufnr = l:bufnrs[tabpagewinnr(l:i) - 1]  " first window, first appears
+
+        let l:no = (l:i <= 10 ? l:i-1 : '#')  " display 0-origin tabpagenr.
+        let l:mod = len(filter(l:bufnrs, 'getbufvar(v:val, "&modified")')) ? '!' : ' '
+        let l:title = gettabwinvar(l:i, tabpagewinnr(l:i), 'title')
+        if l:title == ''
+            let l:title = fnamemodify(gettabwinvar(l:i, tabpagewinnr(l:i), 'cwd'), ':t')
+            if l:title == ''
+                let l:title = fnamemodify(bufname(l:curbufnr),':t')
+                if l:title == ''
+                    let l:title = '[No Name]'
+                endif
+            endif
+        endif
+
+        let l:s .= '%'.l:i.'T'
+        let l:s .= '%#' . (l:i == tabpagenr() ? 'TabLineSel' : 'TabLine') . '#'
+        let l:s .= l:no . ':' . l:title . l:mod
+        let l:s .= '%#TabLineFill#  '
+    endfor
+
+    let l:s .= '%#TabLineFill#%T%=%#TabLine#|%999X %X'
+    return l:s
+endfunction "}}}
+"let &tabline = '%!'. s:SID_PREFIX() . 'my_tabline()'
+set showtabline=2
+
+" 自動更新
+function! NewUpdate()
+    let time = strftime("%H", localtime())
+    exe "set backupext=.".time
+    if expand('%') =~ g:svbfre && !&readonly && &buftype == ''
+        silent! update
+    endif
+endfunction
+
+" Enable menu in console.
+if !has('gui_running')
+    source $VIMRUNTIME/menu.vim
+    set cpo-=<
+    set wcm=<C-z>
+    noremap <F2> :emenu <C-z>
+endif
+
+fun! Filename(...)
+    let filename = expand('%:t:r')
+    if filename == '' | return a:0 == 2 ? a:2 : '' | endif
+    return !a:0 || a:1 == '' ? filename : substitute(a:1, '$1', filename, 'g')
+endf
+
+"}}}
+

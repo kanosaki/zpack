@@ -1,0 +1,6 @@
+.dist/
+.pack-mark/
+.ropeproject/
+
+*.pyc
+

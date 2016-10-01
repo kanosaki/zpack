@@ -1,0 +1,5 @@
+bin-core
+zsh-full
+zplug-full
+tmux-small
+vim-full

@@ -1,0 +1,18 @@
+[[plugins]]
+repo = 'tpope/vim-endwise'
+on_i = 1
+
+[[plugins]]
+repo = 'h1mesuke/vim-alignta'
+on_cmd = ['Alignta', 'Align']
+
+[[plugins]]
+repo = 'scrooloose/nerdtree'
+on_cmd = ['NERDTree']
+
+[[plugins]]
+repo = 'majutsushi/tagbar'
+on_cmd = ['TagbarToggle']
+hook_add = '''
+  nnoremap <silent> go :TagbarToggle<CR>
+'''

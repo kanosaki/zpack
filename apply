@@ -1,0 +1,85 @@
+#!/usr/bin/env zsh
+
+export APP_BASE=${${(%):-%N}:A:h}
+export PACKAGES_DIR=$APP_BASE/packages
+export PACKDIR=$APP_BASE/.dist
+export ZPACK_TMP=~/.zpack.tmp
+export ZPACK_VERBOSE=
+export ZPACK_FAST=1
+
+HOSTS=()
+
+while [[ $# -ge 1 ]] ; do
+  key="$1"
+  case $key in
+    -l|--level)
+      LEVEL="$2"
+      shift
+      ;;
+    -f|--fabric)
+      USE_FABRIC=1
+      ;;
+    -h|--help)
+      PRINT_HELP=1
+      ;;
+    -v|--verbose)
+      ZPACK_VERBOSE=1
+      ;;
+    *)
+      HOSTS=($HOSTS "$key")
+      ;;
+  esac
+  shift
+done
+
+if [[ $PRINT_HELP ]]; then
+  cat << EOF
+Usage: $0 [options] [<host1> [<host2> [...]]]
+
+OPTIONS:
+  -l, --level   : Target level. (default 'full')
+  -f, --fabric  : Use fabric to deploy package. (Parallel execution available.)
+  -h, --help    : Print this help.
+  -v, --verbose : Verbose output.
+
+HOSTS:
+  Hosts to deploy. If nothing specified, deploy target will be localhost.
+EOF
+  return
+fi
+
+LEVEL=${LEVEL:-full}
+
+cd $APP_BASE
+
+./scripts/pack.zsh $LEVEL
+
+apply_localhost()
+{
+  echo "Local mode..."
+  rsync -a $PACKDIR/ $ZPACK_TMP
+  cd $ZPACK_TMP
+  chmod +x ./bootstrap.sh
+  exec ./bootstrap.sh
+}
+
+if [[ -z $HOSTS ]]; then
+  apply_localhost
+else
+  if [[ -z $USE_FABRIC ]]; then
+    for host in $HOSTS; do
+      echo INSTALL at $host
+      if [[ $host == "localhost" ]]; then
+        apply_localhost
+      else
+        rsync -az $PACKDIR/ $host:.zpack.tmp
+        # use ssh
+        ssh $host 'chmod +x .zpack.tmp/bootstrap.sh && exec .zpack.tmp/bootstrap.sh'
+      fi
+    done
+  else
+    fab -H ${(j:,:)HOSTS} do_deploy
+  fi
+fi
+
+cd $APP_BASE

@@ -1,0 +1,4 @@
+# vim-core
+[[plugins]]
+repo = 'Shougo/dein.vim'
+

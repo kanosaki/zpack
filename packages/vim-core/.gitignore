@@ -1,0 +1,9 @@
+backup/
+swap/
+history/
+bundle/*
+dein/*
+!dein/repos/github.com/Shougo/dein.vim/
+!bundle/neobundle.vim/
+.netrwhist
+vim-plugins-profile-master/
