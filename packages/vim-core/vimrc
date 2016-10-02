@@ -191,21 +191,6 @@ cnoremap <C-B> <Left>
 "Move carret visuallity
 nnoremap j gj
 nnoremap k gk
-
-"Unite
-nnoremap <silent> <C-k>f :<C-u>Unite -vertical file file_mru directory_mru<CR>
-nnoremap <silent> _ :<C-u>Unite buffer file file_mru directory_mru<CR>
-nnoremap <silent> <Leader>u :<C-u>Unite buffer file file_mru directory_mru<CR>
-"nnoremap <silent> go :<C-u>Unite -vertical outline<CR>
-nnoremap <silent> go :TagbarToggle<CR>
-nnoremap <silent> gb :<C-u>Unite buffer<CR>
-nnoremap <silent> <C-k>b :<C-u>Unite buffer<CR>
-nnoremap <silent> <C-k>o :<C-u>Unite outline<CR>
-nnoremap <silent> <C-k>m :<C-u>Unite mark<CR>
-
-" disable ?(Search backward) and use ? as ack search
-nnoremap ? :<C-u>Unite ack<CR>
-
 "}}}
 
 let g:untie_split_rule='botright'

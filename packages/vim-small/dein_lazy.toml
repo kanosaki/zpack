@@ -8,7 +8,13 @@ on_cmd = ['Alignta', 'Align']
 
 [[plugins]]
 repo = 'scrooloose/nerdtree'
-on_cmd = ['NERDTree']
+on_cmd = [
+  'NERDTree', 'NERDTreeClose', 'NERDTreeFocus', 
+  'NERDTreeMirror', 'NERDTreeCWD', 'NERDTreeFind', 
+  'NERDTreeFromBookmark', 'NERDTreeToggle']
+hook_add = '''
+  nnoremap <silent> gr :NERDTreeToggle %:p:h<CR>
+'''
 
 [[plugins]]
 repo = 'majutsushi/tagbar'
