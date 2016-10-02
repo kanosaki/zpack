@@ -57,7 +57,7 @@ cd $APP_BASE
 apply_localhost()
 {
   echo "Local mode..."
-  rsync -a $PACKDIR/ $ZPACK_TMP
+  rsync --delete -a $PACKDIR/ $ZPACK_TMP
   cd $ZPACK_TMP
   chmod +x ./bootstrap.sh
   exec ./bootstrap.sh
@@ -72,7 +72,7 @@ else
       if [[ $host == "localhost" ]]; then
         apply_localhost
       else
-        rsync -az $PACKDIR/ $host:.zpack.tmp
+        rsync --delete -az $PACKDIR/ $host:.zpack.tmp
         # use ssh
         ssh $host 'chmod +x .zpack.tmp/bootstrap.sh && exec .zpack.tmp/bootstrap.sh'
       fi
