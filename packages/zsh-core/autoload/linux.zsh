@@ -8,5 +8,5 @@ function chpwd() {
   ls --color=auto
 }
 
-[[ $commands[gvim] ]] && alias v=gvim
+[[ -n $commands[gvim] ]] && alias v=gvim
 
