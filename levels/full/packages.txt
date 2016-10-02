@@ -1,5 +1,6 @@
 bin-core
 zsh-full
-zplug-full
+zsh-prezto
+zsh-enhancd
 tmux-small
 vim-full
