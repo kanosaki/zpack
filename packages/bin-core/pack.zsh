@@ -6,7 +6,7 @@ fi
 mkdir -p $PACKDIR/bin
 
 __zpack::go_build() {
-  if [[ $ZPACK_FAST && -e $1 ]]; then 
+  if [[ -n $ZPACK_FAST && -e $1 ]]; then 
     return
   fi
   go get -u $2

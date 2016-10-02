@@ -32,7 +32,7 @@ while [[ $# -ge 1 ]] ; do
   shift
 done
 
-if [[ $PRINT_HELP ]]; then
+if [[ -n $PRINT_HELP ]]; then
   cat << EOF
 Usage: $0 [options] [<host1> [<host2> [...]]]
 
