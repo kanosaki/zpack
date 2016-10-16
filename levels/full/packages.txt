@@ -2,5 +2,5 @@ bin-core
 zsh-full
 zsh-prezto
 zsh-enhancd
-tmux-small
+tmux-powerline
 vim-full

@@ -6,3 +6,6 @@ git subtree add --prefix=packages/zsh-prezto subtree/zsh-prezto master
 
 git remote add subtree/zsh-enhancd https://github.com/b4b4r07/enhancd.git
 git subtree add --prefix=packages/zsh-enhancd subtree/zsh-enhancd master
+
+git remote add subtree/tmux-powerline https://github.com/erikw/tmux-powerline.git
+git subtree add --prefix=packages/tmux-powerline/repo subtree/tmux-powerline master
